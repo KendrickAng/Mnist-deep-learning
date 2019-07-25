@@ -93,12 +93,17 @@ def main():
             ])
 
     # Learning optimizer and loss function
-    model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=['accuracy'])
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.001);
+    model.compile(optimizer=optimizer, loss="sparse_categorical_crossentropy", metrics=['accuracy'])
     model.summary()
 
     # train model
     NUM_EPOCHS = FLAGS.num_epochs
     model.fit(train_dataset, epochs=NUM_EPOCHS, validation_data=(validation_inputs, validation_targets), verbose=2)
+
+    # Test the model
+    test_loss, test_accuracy = model.evaluate(test_dataset)
+    log.info("Test loss: {.2f}, Test accuracy: {.2f}".format(test_loss, test_accuracy * 100));
 
 if __name__ == "__main__":
     main()
